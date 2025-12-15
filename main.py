@@ -3,6 +3,7 @@ import argparse
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
+from prompts import system_prompt
 
 
 def main():
@@ -21,8 +22,9 @@ def main():
     messages = [types.Content(role="user", parts=[types.Part(text=args.user_prompt)])]
 
     generated_content = client.models.generate_content(
-        model = "gemini-2.5-flash",
+        model="gemini-2.5-flash",
         contents = messages,
+        config=types.GenerateContentConfig(system_instruction=system_prompt)
         )
     usage_metadata = generated_content.usage_metadata
     if usage_metadata == None:
